@@ -12,12 +12,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(
-            // appBar: AppBar(title: Text('Prueba UpConta')),
-            body: Center(
-                child: LoginPage()
-            )
+      theme: new ThemeData(
+        primaryColor: Color(0xFFE76112)
+      ),
+      home: Scaffold(
+        body: Center(
+        child: LoginPage()
         )
+      )
     );
   }
 }
+

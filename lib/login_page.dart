@@ -34,18 +34,41 @@ class _LoginPageState extends State<LoginPage> {
     var status = response.body.contains('error');
     // Obtener respuesta del servidor en variable.
     var message = json.decode(response.body);
-    if(status) {
-      print('message : ${message["error"]}');
-    }else{
-      print('message : ${message["token"]}');
-    }
+    debugPrint(response.body);
+
     if(message == message) {
       setState(() {
         visible = false;
       });
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomePage())
+        PageRouteBuilder(
+          pageBuilder: (c, a1, a2) => HomePage(),
+          transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+          transitionDuration: Duration(seconds: 1),
+        )
+      );
+    }
+    else{
+      setState(() {
+        visible = false;
+      });
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error!'),
+            content: const Text('Usuario o contraseña incorrecto, verifíque'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('regresar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        }
       );
     }
   }
@@ -53,109 +76,115 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Text(
-              '',
-              style: TextStyle(fontSize: 21),
-            ),
-          ),
-          Container(
-            width: 250,
-            padding: EdgeInsets.all(10.0),
-            child: new Image.asset(
-              'assets/upconta.jpg',
-              fit:BoxFit.cover
-            ),
-          ),
-          Container(
-            width: 280,
-            padding: EdgeInsets.all(10.0),
-            child: TextFormField(
-              controller: rucController,
-              autocorrect: true,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: 'RUC',
-                hintText: 'Ingrese el RUC',
-                prefixIcon: Icon(
-                  Icons.business
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: new Form(
+          key: _formKey,
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Text(
+                    '',
+                    style: TextStyle(fontSize: 21),
+                  ),
+                ),
+                Container(
+                  width: 250,
+                  padding: EdgeInsets.all(10.0),
+                  child: new Image.asset(
+                    'assets/upconta.jpg',
+                    fit:BoxFit.cover
+                  ),
+                ),
+                Container(
+                  width: 280,
+                  padding: EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    controller: rucController,
+                    autocorrect: true,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: 'RUC',
+                      hintText: 'Ingrese el RUC',
+                      prefixIcon: Icon(
+                        Icons.business
+                      )
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'El campo ruc es obligatorio';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Container(
+                  width: 280,
+                  padding: EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    controller: usernameController,
+                    autocorrect: true,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: 'Usuario',
+                      hintText: 'Ingrese el usuario',
+                      prefixIcon: Icon(Icons.person)
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'El campo usuario es obligatorio';
+                      }
+                      return null;
+                    },
+                  )
+                ),
+                Container(
+                  width: 280,
+                  padding: EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    controller: passwordController,
+                    autocorrect: true,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: 'Contraseña',
+                      hintText: 'Ingrese la contraseña',
+                      prefixIcon: Icon(Icons.https)
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'El campo contraseña es obligatorio';
+                      }
+                      return null;
+                    },
+                  )
+                ),
+                RaisedButton(
+                  onPressed: (){
+                    if (_formKey.currentState.validate()) {
+                      userLogin();
+                    }
+                  },
+                  color: Color(0xFF14333F),
+                  textColor: Colors.white,
+                  child: Text('Iniciar Sesión'),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+                Visibility(
+                  visible: visible,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator()
+                  )
                 )
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'El campo ruc es obligatorio';
-                }
-                return null;
-              },
+              ],
             ),
           ),
-          Container(
-            width: 280,
-            padding: EdgeInsets.all(10.0),
-            child: TextFormField(
-              controller: usernameController,
-              autocorrect: true,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: 'Usuario',
-                hintText: 'Ingrese el usuario',
-                prefixIcon: Icon(Icons.person)
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'El campo usuario es obligatorio';
-                }
-                return null;
-              },
-            )
-          ),
-          Container(
-            width: 280,
-            padding: EdgeInsets.all(10.0),
-            child: TextFormField(
-              controller: passwordController,
-              autocorrect: true,
-              obscureText: true,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: 'Contraseña',
-                hintText: 'Ingrese la contraseña',
-                prefixIcon: Icon(Icons.https)
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'El campo contraseña es obligatorio';
-                }
-                return null;
-              },
-            )
-          ),
-          RaisedButton(
-            onPressed: (){
-              if (_formKey.currentState.validate()) {
-                userLogin();
-              }
-            },
-            color: Color(0xFF14333F),
-            textColor: Colors.white,
-            child: Text('Iniciar Sesión'),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
-            ),
-          ),
-          Visibility(
-            visible: visible,
-            child: Container(
-              alignment: Alignment.center,
-              child: CircularProgressIndicator()
-            )
-          )
-        ],
+        ),
       ),
     );
   }
