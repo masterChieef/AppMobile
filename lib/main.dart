@@ -17,9 +17,12 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         body: Center(
-        child: LoginPage()
+        child: LoginPage(),
         )
-      )
+      ),
+      routes: <String, WidgetBuilder>{
+        '/login' : (BuildContext context) => new LoginPage(),
+    },
     );
   }
 }

@@ -40,8 +40,8 @@ class _MainOptions extends State<MainOptions> {
          currentIndex: indexTap,
          items: [
            BottomNavigationBarItem(
-             icon:  Icon(Icons.home),
-             title: Text("home"),
+             icon:  Icon(Icons.receipt),
+             title: Text("Administrativo"),
            ),
            BottomNavigationBarItem(
              icon: Icon(Icons.search),
