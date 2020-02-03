@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'home_trips.dart';
+import 'package:userapp/pages/administrative/clients.dart';
+// import 'home_trips.dart';
 import 'search_trips.dart';
 import 'profile_trips.dart';
-
 
 class MainOptions extends StatefulWidget {
   @override
@@ -15,7 +15,7 @@ class _MainOptions extends State<MainOptions> {
 
   int indexTap = 0;
   final List<Widget> widgetsChildren = [
-    HomeTrips(),
+    Clients(),
     SearchTrips(),
     ProfileTrips(),
   ];

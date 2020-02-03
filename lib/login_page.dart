@@ -13,8 +13,8 @@ class _LoginPageState extends State<LoginPage> {
   read() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final key = 'token';
-    final value = prefs.get(key) ?? 0;
-    if(value != '0'){
+    final value = prefs.get(key) ?? false;
+    if(value != false){
       Navigator.of(context).push(
         new MaterialPageRoute(
           builder: (BuildContext context) => new HomePage(),

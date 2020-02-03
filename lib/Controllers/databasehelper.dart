@@ -39,7 +39,7 @@ class DatabaseHelper{
   read() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final key = 'token';
-    final value = prefs.get(key) ?? 0;
+    final value = prefs.get(key) ?? false;
     print('read : $value');
   }
 
